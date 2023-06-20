@@ -3,6 +3,8 @@ let items=document.querySelectorAll("section");
 let activeItemN;
 let activeItem, classList, item;
 let slidesCount=items.length;
+let dtms=1000;
+let timerId=null;
 //
 //
 function getActiveSlide(){
@@ -21,7 +23,18 @@ function getActiveSlide(){
 }
 //
 //
-
+//const timeoutSwitcher=document.querySelector("Checkbox");//ne cog't so
+const timeoutSwitcher=document.getElementById("timeoutSwitcher");
+if(timeoutSwitcher==null)alert("No! Checkbox not found");
+let timeoutSwitchedOn=timeoutSwitcher.checked;
+timeoutSwitcher.addEventListener("click", ()=>{
+	timeoutSwitchedOn=timeoutSwitcher.checked;
+	stopAutoScroll();
+	if(timeoutSwitchedOn){
+		startAutoScroll(dtms);
+	}
+});
+//
 const buttonLeft=document.querySelector(".leftButton");
 const buttonRight=document.querySelector(".rightButton");
 
@@ -57,6 +70,30 @@ function changeSlide(direction){
 	//activeItem.classList.push("sectionVisible");
 	activeItem.setAttribute("class", "sectionVisible");
 }
+
+function startAutoScroll(dtms){
+	timerId=setInterval(changeSlide, dtms, 'next');
+}
+
+function stopAutoScroll(){
+	clearTimeout(timerId);
+}
+
+const timeoutBtn=document.getElementById("setTimeoutBtn");
+timeoutBtn.textContent="set timeout";
+timeoutBtn.addEventListener("click", ()=>{
+	alert("Current timeout value "+dtms+" milliseconds");
+	txt=prompt("Input timeout in milliseconds");
+	if(txt!=""){
+		dtms=+txt;//prompt("Input timeout in milliseconds");
+	}
+	stopAutoScroll();
+	if(timeoutSwitchedOn){
+		startAutoScroll(dtms);
+	}
+});
+
+startAutoScroll(dtms);
 
 let M=[];
 let line=[11, 12, 13, 14, 15];
